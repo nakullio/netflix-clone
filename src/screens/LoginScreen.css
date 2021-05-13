@@ -22,6 +22,17 @@
   margin-bottom: 20px;
 }
 
+.loginScreen__body > h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+.loginScreen__body > h3 {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
 .loginScreen__gradient {
   width: 100%;
   z-index: 1;
@@ -53,4 +64,27 @@
   width: 150px;
   object-fit: contain;
   padding-left: 20px;
+}
+
+.loginScreen__input {
+  margin: 20px;
+}
+
+.loginScreen__input > form > input {
+  padding: 10px;
+  outline-width: 0;
+  height: 30px;
+  width: 30%;
+  border: none;
+  max-width: 600px;
+}
+
+.loginScreen__getStarted {
+  padding: 16px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #e50914;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
 }
