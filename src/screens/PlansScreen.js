@@ -8,6 +8,25 @@ import { loadStripe } from '@stripe/stripe-js';
 function PlansScreen() {
     const [products, setProducts] = useState([]);
     const user = useSelector(selectUser);
+    const [subscription, setSubscription] = useState(null);
+
+    // using useEffect to setSubsctiption
+    useEffect(()=> {
+        db.collection('customers')
+        .doc(user.uid)
+        .collection('subscriptions')
+        .get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(async subscription => {
+                setSubscription({
+                    role: subscription.data().role,
+                    current_period_end: subscription.data().current_period_end.seconds,
+                    current_priod_start: subscription.data().current_priod_start.seconds,
+                })
+            })
+        })
+    }, [user.uid])
+
 
     // using useEffect to fetch the plan, which has been created with firebase-stripe integration
     useEffect(() => {
@@ -29,6 +48,7 @@ function PlansScreen() {
     }, []);
 
     console.log(products)
+    console.log(subscription)
 
     // use async function
     const loadCheckout = async (priceId) => {
@@ -61,7 +81,9 @@ function PlansScreen() {
     return (
         <div className='planScreen'>
             {Object.entries(products).map(([productId, productData]) => {
-                // add some logic to check if the user's subscription is active
+                // TODO add some logic to check if the user's subscription is active
+                const isCurrentPackage = productData.name?.toLowerCase().includes(subscription?.role);
+                
                 return (
                     <div className="plansScreen__plan">
                         <div className="plansScreen__info">
@@ -69,7 +91,9 @@ function PlansScreen() {
                             <h6>{productData.description}</h6>
                         </div>
 
-                        <button onClick={() => loadCheckout(productData.prices.priceId)} >Subscribe</button>
+                        <button onClick={() => !isCurrentPackage && loadCheckout(productData.prices.priceId)} >
+                            {isCurrentPackage ? 'Current Package' : 'Subscribe'}
+                            </button>
                     </div>
                 )
             })}
